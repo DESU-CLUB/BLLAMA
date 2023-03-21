@@ -57,7 +57,8 @@ else:
 
 BLIPmodel,BLIPprocessor = BLIPIntepret.init_BLIP(device)
 def generate_prompt(instruction, input=None, context = None):
-    if input:
+    if context and input:
+        print('CANDI')
         return f"""Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
 
 ### Instruction:
@@ -67,7 +68,30 @@ def generate_prompt(instruction, input=None, context = None):
 ### Input:
 {input}
 
+        ### Response:"""
+
+    elif input:
+        print('I')
+        return f"""Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+
+### Instruction:
+{instruction}
+
+### Input:
+{input}
+
 ### Response:"""
+    elif context:
+         print('C')
+         print(context)
+         return f"""Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+
+### Instruction:
+{context}
+{instruction}
+
+### Response:"""
+
     else:
         return f"""Below is an instruction that describes a task. Write a response that appropriately completes the request.
 
@@ -95,12 +119,11 @@ def evaluate(
     max_new_tokens=128,
     **kwargs,
 ):
-    print(image)
     if image is None:
         context = None
     else:
         context = BLIPIntepret.infer_BLIP2(BLIPmodel,BLIPprocessor, image, device)
-        context+= 'The above are the context of the image that you will use alongside the response.'
+        context+= '\nThe above are the context of an image that you will use alongside the response.'
     prompt = generate_prompt(instruction, input, context)
     inputs = tokenizer(prompt, return_tensors="pt")
     input_ids = inputs["input_ids"].to(device)
