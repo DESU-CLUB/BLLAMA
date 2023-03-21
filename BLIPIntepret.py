@@ -13,7 +13,8 @@ def init_BLIP(device):
         "Salesforce/blip2-opt-2.7b", load_in_8bit=True,torch_dtype=torch.float16, device_map = 'auto'
     )
     model.eval()
-    model = torch.compile(model)
+    if torch.__version__ >= "2":
+        model = torch.compile(model)
     processor = processor
     return model,processor
 
