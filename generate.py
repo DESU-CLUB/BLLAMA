@@ -58,7 +58,7 @@ else:
 BLIPmodel,BLIPprocessor = BLIPIntepret.init_BLIP(device)
 def generate_prompt(instruction, input=None, context = None):
     if context and input:
-        print('CANDI')
+        print('Context and Input combined')
         return f"""Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
 
 ### Instruction:
@@ -71,7 +71,7 @@ def generate_prompt(instruction, input=None, context = None):
         ### Response:"""
 
     elif input:
-        print('I')
+        print('Input only mode')
         return f"""Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
 
 ### Instruction:
@@ -82,7 +82,7 @@ def generate_prompt(instruction, input=None, context = None):
 
 ### Response:"""
     elif context:
-         print('C')
+         print('Context only mode')
          print(context)
          return f"""Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
 
@@ -93,6 +93,7 @@ def generate_prompt(instruction, input=None, context = None):
 ### Response:"""
 
     else:
+        print('Instruction Mode')
         return f"""Below is an instruction that describes a task. Write a response that appropriately completes the request.
 
 ### Instruction:
