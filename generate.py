@@ -170,8 +170,13 @@ gr.Interface(
             label="Output",
         )
     ],
-    title="🦙🌲 Alpaca-LoRA",
-    description="Alpaca-LoRA is a 7B-parameter LLaMA model finetuned to follow instructions. It is trained on the [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) dataset and makes use of the Huggingface LLaMA implementation. For more information, please visit [the project's website](https://github.com/tloen/alpaca-lora).",
+    title="🦙🌲 BLLAMA",
+    description="BLLAMA is a pipeline that uses both ALPACA-LORA as well as BLIP-2 to allow LLAMA to generate text in the context of simple images. You can visit the Github repo [here](https://github.com/DESU-CLUB/BLLAMA)\n\n\
+The original ALPACA-LORA can be found [here](https://github.com/tloen/alpaca-lora) and the BLIP-2 model can be found on huggingface.\
+\n## Credits\n\
+I would like to credit tloen, the creator of ALPACA-LORA, as well as huggingface for their own implementation of LLAMA and BLIP-2. \
+\nI would also like to credit the original creators of [LLAMA](https://github.com/facebookresearch/llama), Meta AI, as well as Stanford University, who created [ALPACA](https://github.com/tatsu-lab/stanford_alpaca)\
+    ",
 ).launch()
 
 # Old testing code follows.
