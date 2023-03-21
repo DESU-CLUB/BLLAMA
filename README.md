@@ -11,6 +11,14 @@
 1. cd to the cloned repo
 2. Run ```python3 generate.py```
 
+# Sample of inference
+![My Image](test.jpg)
+
+
+#TODO:
+1. Try to reduce VRAM Usage: It hits around 14GB of VRAM on the 7B Weights when combined with BLIP2
+2. Add ability for users to customise their prompts to BLIP-2 in Gradio. This can help finetune the context given from BLIP2 to ALPACA, improving accuracy of generated outputs
+
 
 ## Acknowledgements
-Once again, I would like to credit the Salesforce team for creating BLIP2, as well as tloen, the original publisher of alpaca-lora.
+Once again, I would like to credit the Salesforce team for creating BLIP2, as well as tloen, the original creator of alpaca-lora.
