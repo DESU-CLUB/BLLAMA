@@ -1,4 +1,4 @@
-## 🦙🌲🤏 BLLAMA: A BLIP2 + ALPACA-LORA pipeline
+## 🦙🌲🤏 BLLAMA: A BLIP2 + ALPACA-LORA Pipeline
 
 # Setup
 1. Git clone this repository
