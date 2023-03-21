@@ -34,7 +34,6 @@ def infer_BLIP2(model,processor,image,device):
         generated_ids = model.generate(**inputs)
         generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0].strip()
         outputs+= prompt+generated_text+' '
-        print(prompt+generated_text)
     return outputs
 
 '''
