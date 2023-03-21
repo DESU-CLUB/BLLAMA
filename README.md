@@ -21,4 +21,4 @@
 
 
 ## Acknowledgements
-Once again, I would like to credit the Salesforce team for creating BLIP2, as well as tloen, the original creator of alpaca-lora.
+Once again, I would like to credit the Salesforce team for creating BLIP2, as well as tloen, the original creator of alpaca-lora. I would also like to thank Meta, the original creator of LLAMA.
