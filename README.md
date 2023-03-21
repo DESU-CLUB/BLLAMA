@@ -12,7 +12,7 @@
 2. Run ```python3 generate.py```
 
 # Sample of inference
-![My Image](test.jpg)
+![My Image](Screenshot from 2023-03-21 14-26-23.png.jpg)
 
 
 #TODO:
