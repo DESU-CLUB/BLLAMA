@@ -2,7 +2,7 @@ import torch
 from peft import PeftModel
 import transformers
 import gradio as gr
-
+import BLIPIntepret
 assert (
     "LlamaTokenizer" in transformers._import_structure["models.llama"]
 ), "LLaMA is now in HuggingFace's main branch.\nPlease reinstall it: pip uninstall transformers && pip install git+https://github.com/huggingface/transformers.git"
@@ -15,6 +15,7 @@ LORA_WEIGHTS = "tloen/alpaca-lora-7b"
 
 if torch.cuda.is_available():
     device = "cuda"
+    print('Using GPU')
 else:
     device = "cpu"
 
@@ -54,12 +55,13 @@ else:
         device_map={"": device},
     )
 
-
-def generate_prompt(instruction, input=None):
+BLIPmodel,BLIPprocessor = BLIPIntepret.init_BLIP(device)
+def generate_prompt(instruction, input=None, context = None):
     if input:
         return f"""Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
 
 ### Instruction:
+{context}
 {instruction}
 
 ### Input:
@@ -80,9 +82,12 @@ if torch.__version__ >= "2":
     model = torch.compile(model)
 
 
+
+
 def evaluate(
     instruction,
     input=None,
+    image = None,
     temperature=0.1,
     top_p=0.75,
     top_k=40,
@@ -90,7 +95,13 @@ def evaluate(
     max_new_tokens=128,
     **kwargs,
 ):
-    prompt = generate_prompt(instruction, input)
+    print(image)
+    if image is None:
+        context = None
+    else:
+        context = BLIPIntepret.infer_BLIP2(BLIPmodel,BLIPprocessor, image, device)
+        context+= 'The above are the context of the image that you will use alongside the response.'
+    prompt = generate_prompt(instruction, input, context)
     inputs = tokenizer(prompt, return_tensors="pt")
     input_ids = inputs["input_ids"].to(device)
     generation_config = GenerationConfig(
@@ -120,6 +131,7 @@ gr.Interface(
             lines=2, label="Instruction", placeholder="Tell me about alpacas."
         ),
         gr.components.Textbox(lines=2, label="Input", placeholder="none"),
+        gr.components.Image(shape = (200,200), placeholder = "Image"),
         gr.components.Slider(minimum=0, maximum=1, value=0.1, label="Temperature"),
         gr.components.Slider(minimum=0, maximum=1, value=0.75, label="Top p"),
         gr.components.Slider(minimum=0, maximum=100, step=1, value=40, label="Top k"),
