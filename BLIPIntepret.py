@@ -7,11 +7,14 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(device)
 
 def init_BLIP(device):
-
     processor = Blip2Processor.from_pretrained("Salesforce/blip2-opt-2.7b")
-    model = Blip2ForConditionalGeneration.from_pretrained(
-        "Salesforce/blip2-opt-2.7b", load_in_8bit=True,torch_dtype=torch.float16, device_map = 'auto'
-    )
+    if device == 'cuda':
+        model = Blip2ForConditionalGeneration.from_pretrained(
+         "Salesforce/blip2-opt-2.7b", load_in_8bit=True,torch_dtype=torch.float16, device_map = 'auto')
+    else:
+        print('Using CPU model')
+        model = Blip2ForConditionalGeneration.from_pretrained( "Salesforce/blip2-opt-2.7b",device_map={"": device}, torch_dtype=torch.float32,low_cpu_mem_usage=True)
+
     model.eval()
     if torch.__version__ >= "2":
         model = torch.compile(model)
@@ -30,8 +33,10 @@ def infer_BLIP2(model,processor,image,device):
         "Question: What emotion does the person or animal in the image feel? Answer:",
         ]
     for prompt in prompts:
-        inputs = processor(images=image, text=prompt, return_tensors="pt").to(device, torch.float16)
-
+        if device == 'cuda':
+            inputs = processor(images=image, text=prompt, return_tensors="pt").to(device, torch.float16)
+        else:
+            inputs = processor(images=image, text=prompt, return_tensors="pt")
         generated_ids = model.generate(**inputs)
         generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0].strip()
         outputs+= prompt+generated_text+' '
